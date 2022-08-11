@@ -18,15 +18,37 @@ public class QuartzApplication {
 	}
 
 	private static void run(ApplicationContext applicationContext) throws Exception {
+		JobSchedulerDetail cronJobDetail = getPredefinedCronJob();
+		JobSchedulerDetail simpleJobDetail = getPredefinedSimpleJob();
+
+		JobSchedulerService service = applicationContext.getBean(JobSchedulerService.class);
+
+		service.saveOrUpdate(cronJobDetail);
+		service.saveOrUpdate(simpleJobDetail);
+	}
+
+	private static JobSchedulerDetail getPredefinedCronJob() {
 		JobSchedulerDetail cronJobDetail = new JobSchedulerDetail();
+
 		cronJobDetail.setJobName("Cron Job Test");
 		cronJobDetail.setJobGroup("CronJob");
 		cronJobDetail.setCronExpression("0/5 * * * * ?");
 		cronJobDetail.setJobStatus("NEW");
 		cronJobDetail.setJobDescription("Testing Cron Job which just prints text");
 
-		JobSchedulerService service = applicationContext.getBean(JobSchedulerService.class);
-		service.saveOrUpdate(cronJobDetail);
+		return cronJobDetail;
+	}
+
+	private static JobSchedulerDetail getPredefinedSimpleJob() {
+		JobSchedulerDetail cronJobDetail = new JobSchedulerDetail();
+
+		cronJobDetail.setJobName("Simple Job Test");
+		cronJobDetail.setJobGroup("SimpleJob");
+		cronJobDetail.setJobStatus("NEW");
+		cronJobDetail.setJobDescription("Testing Simple Job which just prints text");
+		cronJobDetail.setRepeatTime((long) 2000);
+
+		return cronJobDetail;
 	}
 
 }

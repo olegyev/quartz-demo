@@ -6,9 +6,15 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 
 public class SimpleJob extends QuartzJobBean {
 
+	static long counter = 0;
+
 	@Override
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-		System.out.println("Greetings from SimpleJob!");
+		String jobGroup = context.getJobDetail().getKey().getGroup();
+		String jobName = context.getJobDetail().getKey().getName();
+		System.out.printf("""
+				Greetings from %s - %s! Running %d
+				""", jobGroup, jobName, ++counter);
 	}
 
 }

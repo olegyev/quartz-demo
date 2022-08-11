@@ -25,7 +25,7 @@ public class JobSchedulerDetail {
 	private String cronExpression;
 	private String jobDescription;
 	private String interfaceName;
-	private Long repeatTime;
+	private Long repeatTime; // millis
 	private Boolean cronJob;
 
 }

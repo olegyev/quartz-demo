@@ -12,8 +12,11 @@ public class CronJob extends QuartzJobBean {
 
 	@Override
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
+		String jobGroup = context.getJobDetail().getKey().getGroup();
 		String jobName = context.getJobDetail().getKey().getName();
-		System.out.println("Greetings from CronJob " + jobName + "! Running " + (++counter));
+		System.out.printf("""
+				Greetings from %s - %s! Running %d
+				""", jobGroup, jobName, ++counter);
 	}
 
 }

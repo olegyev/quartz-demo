@@ -41,13 +41,12 @@ public class JobSchedulerService {
 	private JobSchedulerCreator scheduleCreator;
 
 	public void saveOrUpdate(JobSchedulerDetail job) throws Exception {
-		if (job.getCronExpression().length() > 0) {
+		if (job.getCronExpression() != null && job.getCronExpression().length() > 0) {
 			job.setJobClass(CronJob.class.getName());
 			job.setCronJob(true);
 		} else {
 			job.setJobClass(SimpleJob.class.getName());
 			job.setCronJob(false);
-			job.setRepeatTime((long) 1);
 		}
 
 		if (StringUtils.isEmpty(job.getJobId())) {
@@ -104,7 +103,7 @@ public class JobSchedulerService {
 
 				System.out.println("New Job = " + jobInfo.getJobName() + " has been scheduled.");
 			} else {
-				System.out.println("Job exists");
+				System.out.println("Job exists " + jobInfo.getJobName());
 			}
 		} catch (ClassNotFoundException | SchedulerException e) {
 			System.out.println(e.getMessage());
@@ -112,17 +111,17 @@ public class JobSchedulerService {
 	}
 
 	private void updateScheduledJob(JobSchedulerDetail jobInfo) {
-		Trigger newTrigger;
+		Trigger trigger;
 
 		if (jobInfo.getCronJob()) {
-			newTrigger = scheduleCreator.createCronTrigger(
+			trigger = scheduleCreator.createCronTrigger(
 					jobInfo.getJobName(),
 					new Date(),
 					jobInfo.getCronExpression(),
 					SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW // Fires again if a misfire occurs
 			);
 		} else {
-			newTrigger = scheduleCreator.createSimpleTrigger(
+			trigger = scheduleCreator.createSimpleTrigger(
 					jobInfo.getJobName(),
 					new Date(),
 					jobInfo.getRepeatTime(),
@@ -131,7 +130,7 @@ public class JobSchedulerService {
 		}
 
 		try {
-			schedulerFactoryBean.getScheduler().rescheduleJob(TriggerKey.triggerKey(jobInfo.getJobName()), newTrigger);
+			schedulerFactoryBean.getScheduler().rescheduleJob(TriggerKey.triggerKey(jobInfo.getJobName()), trigger);
 			jobInfo.setJobStatus("EDITED & SCHEDULED");
 			schedulerRepository.save(jobInfo);
 
