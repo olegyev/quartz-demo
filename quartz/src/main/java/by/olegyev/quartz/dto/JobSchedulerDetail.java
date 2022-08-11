@@ -16,14 +16,14 @@ import lombok.Data;
 public class JobSchedulerDetail {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String jobId;
+	@GeneratedValue(strategy = GenerationType.AUTO) // Should not be IDENTITY due to H2 bug - https://www.inflearn.com/questions/382601
+	private Long jobId;
 	private String jobName;
 	private String jobGroup;
 	private String jobStatus;
 	private String jobClass;
 	private String cronExpression;
-	private String desc;
+	private String jobDescription;
 	private String interfaceName;
 	private Long repeatTime;
 	private Boolean cronJob;

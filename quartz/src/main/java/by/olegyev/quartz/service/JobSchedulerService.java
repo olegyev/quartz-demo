@@ -51,14 +51,13 @@ public class JobSchedulerService {
 		}
 
 		if (StringUtils.isEmpty(job.getJobId())) {
-			System.out.println("Existing Job Detail: " + job);
 			scheduleNewJob(job);
 		} else {
+			System.out.println("Existing Job Detail: " + job);
+			job.setJobDescription("Job ID = " + job.getJobId());
+			job.setInterfaceName("interface_" + job.getJobId());
 			updateScheduledJob(job);
 		}
-
-		job.setDesc("Job ID = " + job.getJobId());
-		job.setInterfaceName("interface_" + job.getJobId());
 
 		System.out.println("New Job = " + job.getJobName() + " has been created.");
 	}
@@ -136,7 +135,7 @@ public class JobSchedulerService {
 			jobInfo.setJobStatus("EDITED & SCHEDULED");
 			schedulerRepository.save(jobInfo);
 
-			System.out.println("New Job = " + jobInfo.getJobName() + " has been updated and scheduled.");
+			System.out.println("Existing Job = " + jobInfo.getJobName() + " has been updated and scheduled.");
 		} catch (SchedulerException e) {
 			System.out.println(e.getMessage());
 		}
