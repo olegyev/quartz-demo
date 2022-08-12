@@ -38,7 +38,7 @@ public class QuartzApplication {
 
 		cronJobDetail.setJobName("Cron Job Test");
 		cronJobDetail.setJobGroup("CronJob");
-		cronJobDetail.setCronExpression("0/5 * * * * ?");
+		cronJobDetail.setCronExpression("0/5 * * * * ?"); // every 5 seconds
 		cronJobDetail.setJobStatus("NEW");
 		cronJobDetail.setJobDescription("Testing Cron Job which just prints text");
 
