@@ -40,6 +40,9 @@ public class JobSchedulerService {
 	@Autowired
 	private JobSchedulerCreator scheduleCreator;
 
+	@Autowired
+	private JobSchedulerDetailRepository repository;
+
 	public void saveOrUpdate(JobSchedulerDetail job) throws Exception {
 		if (job.getCronExpression() != null && job.getCronExpression().length() > 0) {
 			job.setJobClass(CronJob.class.getName());
@@ -134,10 +137,23 @@ public class JobSchedulerService {
 			jobInfo.setJobStatus("EDITED & SCHEDULED");
 			schedulerRepository.save(jobInfo);
 
-			System.out.println("Existing Job = " + jobInfo.getJobName() + " has been updated and scheduled.");
+			System.out.println("Existing Job = " + jobInfo.getJobName() + " has been updated and rescheduled.");
 		} catch (SchedulerException e) {
 			System.out.println(e.getMessage());
 		}
 	}
+
+	public JobSchedulerDetail getJobByName(String jobName) {
+		return repository.findByJobName(jobName);
+	}
+
+	/*
+	* Other available methods on jobs (calling on class Scheduler -
+	* all the methods listed below accept JobKey object, consisting of job's name and group, to find the job):
+	* - triggerJob() - runs job once
+	* - pauseJob() - pauses job
+	* - resumeJob() - resumes job after being paused
+	* - deleteJob() - deletes job from a scheduler
+	 * */
 
 }

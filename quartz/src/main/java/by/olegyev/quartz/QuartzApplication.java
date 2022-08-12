@@ -18,13 +18,19 @@ public class QuartzApplication {
 	}
 
 	private static void run(ApplicationContext applicationContext) throws Exception {
+		// Create jobs' details instances
 		JobSchedulerDetail cronJobDetail = getPredefinedCronJob();
 		JobSchedulerDetail simpleJobDetail = getPredefinedSimpleJob();
 
 		JobSchedulerService service = applicationContext.getBean(JobSchedulerService.class);
 
+		// Runs jobs with Quartz' Scheduler
 		service.saveOrUpdate(cronJobDetail);
 		service.saveOrUpdate(simpleJobDetail);
+
+		// Get already started job and reschedule it (uncomment to test)
+		JobSchedulerDetail startedCronJob = service.getJobByName(cronJobDetail.getJobName());
+		service.saveOrUpdate(startedCronJob);
 	}
 
 	private static JobSchedulerDetail getPredefinedCronJob() {
