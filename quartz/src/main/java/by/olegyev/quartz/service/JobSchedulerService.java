@@ -14,12 +14,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import by.olegyev.quartz.creator.JobSchedulerCreator;
 import by.olegyev.quartz.dto.JobSchedulerDetail;
-import by.olegyev.quartz.job.CronJob;
-import by.olegyev.quartz.job.SimpleJob;
 import by.olegyev.quartz.repository.JobSchedulerDetailRepository;
 
 @Service
@@ -44,15 +41,7 @@ public class JobSchedulerService {
 	private JobSchedulerDetailRepository repository;
 
 	public void saveOrUpdate(JobSchedulerDetail job) throws Exception {
-		if (job.getCronExpression() != null && job.getCronExpression().length() > 0) {
-			job.setJobClass(CronJob.class.getName());
-			job.setCronJob(true);
-		} else {
-			job.setJobClass(SimpleJob.class.getName());
-			job.setCronJob(false);
-		}
-
-		if (StringUtils.isEmpty(job.getJobId())) {
+		if (job.getJobId() == null) {
 			scheduleNewJob(job);
 		} else {
 			System.out.println("Existing Job Detail: " + job);
@@ -137,7 +126,7 @@ public class JobSchedulerService {
 			jobInfo.setJobStatus("EDITED & SCHEDULED");
 			schedulerRepository.save(jobInfo);
 
-			System.out.println("Existing Job = " + jobInfo.getJobName() + " has been updated and rescheduled.");
+			System.out.println("Existing Job = " + jobInfo.getJobId() + " - " + jobInfo.getJobName() + " has been updated and rescheduled.");
 		} catch (SchedulerException e) {
 			System.out.println(e.getMessage());
 		}
@@ -148,12 +137,12 @@ public class JobSchedulerService {
 	}
 
 	/*
-	* Other available methods on jobs (calling on class Scheduler -
-	* all the methods listed below accept JobKey object, consisting of job's name and group, to find the job):
-	* - triggerJob() - runs job once
-	* - pauseJob() - pauses job
-	* - resumeJob() - resumes job after being paused
-	* - deleteJob() - deletes job from a scheduler
+	 * Other available methods on jobs (calling on class Scheduler -
+	 * all the methods listed below accept JobKey object, consisting of job's name and group, to find the job):
+	 * - triggerJob() - runs job once
+	 * - pauseJob() - pauses job
+	 * - resumeJob() - resumes job after being paused
+	 * - deleteJob() - deletes job from a scheduler
 	 * */
 
 }

@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
 import by.olegyev.quartz.dto.JobSchedulerDetail;
+import by.olegyev.quartz.job.CronJob;
+import by.olegyev.quartz.job.SimpleJob;
 import by.olegyev.quartz.service.JobSchedulerService;
 
 @SpringBootApplication
@@ -38,7 +40,9 @@ public class QuartzApplication {
 
 		cronJobDetail.setJobName("Cron Job Test");
 		cronJobDetail.setJobGroup("CronJob");
+		cronJobDetail.setJobClass(CronJob.class.getName());
 		cronJobDetail.setCronExpression("0/5 * * * * ?"); // every 5 seconds
+		cronJobDetail.setCronJob(true);
 		cronJobDetail.setJobStatus("NEW");
 		cronJobDetail.setJobDescription("Testing Cron Job which just prints text");
 
@@ -50,6 +54,8 @@ public class QuartzApplication {
 
 		cronJobDetail.setJobName("Simple Job Test");
 		cronJobDetail.setJobGroup("SimpleJob");
+		cronJobDetail.setJobClass(SimpleJob.class.getName());
+		cronJobDetail.setCronJob(false);
 		cronJobDetail.setJobStatus("NEW");
 		cronJobDetail.setJobDescription("Testing Simple Job which just prints text");
 		cronJobDetail.setRepeatTime((long) 2000);
