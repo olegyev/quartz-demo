@@ -58,7 +58,7 @@ public class QuartzApplication {
 		cronJobDetail.setCronJob(false);
 		cronJobDetail.setJobStatus("NEW");
 		cronJobDetail.setJobDescription("Testing Simple Job which just prints text");
-		cronJobDetail.setRepeatTime((long) 2000);
+		cronJobDetail.setRepeatTime((long) 2000); // every 2 seconds
 
 		return cronJobDetail;
 	}

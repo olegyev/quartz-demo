@@ -15,8 +15,8 @@ public class CronJob extends QuartzJobBean {
 		String jobGroup = context.getJobDetail().getKey().getGroup();
 		String jobName = context.getJobDetail().getKey().getName();
 		System.out.printf("""
-				Greetings from %s - %s! Running %d
-				""", jobGroup, jobName, ++counter);
+				Greetings from %s - %s! Running %d time. Thread - %s
+				""", jobGroup, jobName, ++counter, Thread.currentThread().getName());
 	}
 
 }
